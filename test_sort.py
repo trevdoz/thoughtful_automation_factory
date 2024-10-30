@@ -1,4 +1,5 @@
 import unittest
+from sort import sort
 
 class TestSortFunction(unittest.TestCase):
     def test_standard_package(self):
@@ -50,20 +51,28 @@ class TestSortFunction(unittest.TestCase):
         self.assertEqual(sort(20, 20, 20, 22), "SPECIAL")
     
     def test_zero_dimension(self):
-        # Edge case with zero dimensions
-        self.assertEqual(sort(0, 0, 0, 10), "STANDARD")
-    
-    def test_negative_dimensions(self):
-        # Edge case with negative dimensions (assuming invalid input treated as non-bulky)
-        self.assertEqual(sort(-100, 50, 50, 10), "STANDARD")
-    
-    def test_negative_mass(self):
-        # Edge case with negative mass (assuming invalid input treated as non-heavy)
-        self.assertEqual(sort(50, 50, 50, -10), "STANDARD")
+        # Edge case with zero dimensions (assuming zero dimensions are acceptable)
+        self.assertEqual(sort(0, 50, 50, 10), "STANDARD")
+        self.assertEqual(sort(50, 0, 50, 10), "STANDARD")
+        self.assertEqual(sort(50, 50, 0, 10), "STANDARD")
     
     def test_zero_mass(self):
-        # Edge case with zero mass
+        # Edge case with zero mass (assuming zero mass is acceptable)
         self.assertEqual(sort(50, 50, 50, 0), "STANDARD")
+    
+    def test_negative_dimensions(self):
+        # Negative dimensions should raise a ValueError
+        with self.assertRaises(ValueError):
+            sort(-100, 50, 50, 10)
+        with self.assertRaises(ValueError):
+            sort(50, -50, 50, 10)
+        with self.assertRaises(ValueError):
+            sort(50, 50, -50, 10)
+    
+    def test_negative_mass(self):
+        # Negative mass should raise a ValueError
+        with self.assertRaises(ValueError):
+            sort(50, 50, 50, -10)
 
 if __name__ == "__main__":
     unittest.main()
